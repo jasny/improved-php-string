@@ -18,7 +18,8 @@ string distance and streaming. Those deserve to have their own libraries.
 To perform string operations dealing with a specific locale, use the
 [`Collator` class](http://php.net/manual/en/class.collator.php) from the intl PHP extension instead.
 
-For multibyte safe operators, the [mbstring](https://php.net/mbstring) extension must be installed.
+All functions are multibyte (UTF-8) safe by default. To increase performance the `STRING_RAW` flag may be passed, which
+only considers single byte strings. Other character sets should not be used.
 
 _Note: No effort has been made to match the original native PHP function names._
 
@@ -48,10 +49,10 @@ Functions
 * [`string_repeat(string $subject, int $multiplier)`](#string_repeat)
 * [`string_chunk(string $subject, int $length[, int $flags])`](#string_chunk)
 * [`string_split(string $subject, string $delimiter[, int $limit])`](#string_split)
-* [`string_convert_case(string $subject, int $conversion)`](#string_convert)
+* [`string_convert_case(string $subject, int $flags)`](#string_convert)
+* [`string_remove_accents(string $subject)`](#string_remove_accents)
 * [`string_format(string $format, ...)`](#string_format)
 * [`string_parse(string $subject, string $format)`](#string_parse)
-* [`string_generate_random(int $length, int $type)`](#string_generate_random)
 
 Constants
 ---
@@ -59,13 +60,13 @@ Constants
 ### Flags
 
 * `STRING_CASE_INSENSITIVE` - Case insensitive comparison
-* `STRING_MULTIBYTE` - Perform a multibyte safe operation
+* `STRING_RAW` - Perform a (faster) multibyte unsafe operation
 
 ### Find flags
 
-* `STRING_FIND_FIRST` - Find only the first occurence of the substring
-* `STRING_FIND_LAST` - Find only the last occurence of the substring
-* `STRING_FIND_ALL` - Find all occurence of the substring
+* `STRING_FIND_FIRST` - Find only the first occurrence of the substring
+* `STRING_FIND_LAST` - Find only the last occurrence of the substring
+* `STRING_FIND_ALL` - Find all occurrences of the substring
 
 ### Pad/trim flags
 
@@ -73,14 +74,9 @@ Constants
 * `STRING_SIDE_RIGHT` - Characters on the end of the string
 * `STRING_SIDE_BOTH` - Characters on both sides of the string
 
-### Split flags
-
-* `STRING_WORD_BREAK_NONE` - Don't break up words
-* `STRING_WORD_BREAK_LONG` - Only break words if they are longer than the given size
-
 ### Types
 
-* `STRING_TYPE_ALPHANUM` - Alphanumeric characters
+* `STRING_TYPE_ALNUM` - Alphanumeric characters
 * `STRING_TYPE_ALPHA` - Alphabetic characters
 * `STRING_TYPE_CNTRL` - Control character
 * `STRING_TYPE_DIGIT` - Numeric characters
@@ -94,9 +90,9 @@ Constants
 
 ### Case conversions
 
-* `STRING_LOWERCASE` - Lowercase characters
 * `STRING_UPPERCASE` - Uppercase characters
-* `STRING_TITLECASE` - Uppercase the first character of each word
+* `STRING_LOWERCASE` - Lowercase characters
+* `STRING_TITLE` - Uppercase the first character of each word
 
 
 Reference
@@ -142,15 +138,12 @@ Get the length of a string.
 
 ### string_find_position
 
-    int|array string_find_position(string $subject, string $substr, int $flags = STRING_FIND_FIRST | 0)
+    int string_find_position(string $subject, string $substr, int $flags = STRING_FIND_FIRST)
 
 Find the position of a substring.
 
 On `STRING_FIND_FIRST` or `STRING_FIND_LAST`, the position is returned as integer. If string doesn't contain the
-substring, `-1` is returned.
-
-If `STRING_FIND_ALL` is specified, an array is returned with all positions. If string doesn't contain the substring,
-an empty array is returned.
+substring, `-1` is returned. `STRING_FIND_ALL` is not supported.
 
 ### string_is_type
 
@@ -197,7 +190,7 @@ Returns `null` if the string isn't found. If you want to get the complete string
 
     string string_after(string $subject, string $substr, int $flags = STRING_FIND_FIRST)
 
-Get the portion of the string before the given substring.
+Get the portion of the string after the given substring.
 
 Returns `null` if the string isn't found. If you want to get the complete string if the substring isn't found, use
 
@@ -246,41 +239,39 @@ Multiplier must be greater than or equal to 0. If the multiplier is set to 0, th
 
     array string_chunk(string $subject, int $length, int $flags = 0)
 
-Split the string in chunks of a specific length.
-
-Specify `STRING_WORD_BREAK_NONE` or `STRING_WORD_BREAK_LONG` to keep words together. In that case length specifies the
-maximum length. In case of `STRING_WORD_BREAK_NONE`, the chunk may be longer than the specified length, it there is a
-long word.
-
-You can split up a string in words using
-
-    $words = string_chunk($subject, 1, STRING_NO_WORD_BREAK);
+Split the string in chunks of a specific length. A length of 1 splits the string into characters.
 
 ### string_split
 
-    array string_split(string $subject, string $delimiter, int $limit = null)
+    array string_split(string $subject, string $delimiter, int $limit = null, int $flags = 0)
 
 Split up a string using a delimiter.
+
+An empty delimiter splits the string into characters.
 
 If limit is set and positive, the returned array will contain a maximum of limit elements with the last element
 containing the rest of string. If the limit parameter is negative, all components except the last -limit are returned.
 
 ### string_convert_case
 
-    array string_convert_case(string $subject, int $conversion)
+    array string_convert_case(string $subject, int $flags)
 
 Convert the alphabetic characters in a string to lowercase or uppercase.
 
-The conversion parameter is a binary set.
-
-If `STRING_TITLECASE` is specified, the first character of each words is converted to upper case. This may be mixed
+If `STRING_TITLE` is specified, the first character of each words is converted to upper case. This may be mixed
 with `STRING_LOWERCASE` to convert the other characters to lower case. By default other characters are untouched.
 
-    $result = string_convert_case($subject, STRING_TITLECASE | STRING_LOWERCASE);
+    $result = string_convert_case($subject, STRING_TITLE | STRING_LOWERCASE);
 
 Optionally the conversion may specify a `STRING_SIDE_*` constant. To upper case the first character of a string do
 
     $result = string_convert_case($subject, STRING_UPPERCASE | STRING_SIDE_LEFT);
+
+### string_remove_accents
+
+    string string_remove_accents(string $subject)
+
+Replace alphabetic characters with accents with similar ASCII characters.
 
 ### string_format
 
@@ -295,15 +286,9 @@ Create a formatted string. See [sprintf()](https://php.net/sprintf) for more inf
 Parse a string, interpreted according to the specified format. See [sscanf()](https://php.net/sscanf) for more
 information.
 
-### string_generate_random
+## Notes to the reader
 
-    string string_generate_random(int $length, int $type = STRING_TYPE_ALPHANUM)
+The code in this library is ugly so your code doesn't have to be. Do not take this as example as how to program.
 
-Generate a random string using the specified character class.
-
-Type is a binary set of `STRING_TYPE_*` constants.
-
-> **Caution** This function does not generate cryptographically secure values, and should not be used for cryptographic
-> purposes. If you need a cryptographically secure value, consider using [random_int()](https://php.net/random_int) or
-> [random_bytes()](https://php.net/random_bytes) instead.
+The intention is to turn this library into a PHP extension.
 
