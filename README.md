@@ -42,8 +42,6 @@ Functions
 * [`string_ends_with(string $subject, string $substr[, int $flags])`](#string_ends_with)
 * [`string_length(string $subject)`](#string_length)
 * [`string_find_position(string $subject, string $substr[, int $flags])`](#string_find_position)
-* [`string_is_type(string $subject, int $type)`](#string_is_type)
-* [`string_contains_type(string $subject, int $type)`](#string_contains_type)
 * [`string_slice(string $subject, int $offset[, int $length[, int $flags]])`](#string_slice)
 * [`string_before(string $subject, string $substr[, int $flags])`](#string_before)
 * [`string_after(string $subject, string $substr[, int $flags])`](#string_after)
