@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jasny;
+namespace Improved;
 
 /**
  * Check if a string contains a substring.

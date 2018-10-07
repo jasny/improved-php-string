@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jasny;
+namespace Improved;
 
 /**
  * Split up a string using a delimiter.

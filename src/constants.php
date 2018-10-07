@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jasny;
+namespace Improved;
 
 /** Case insensitive comparison */
 const STRING_CASE_INSENSITIVE = 0x010000;

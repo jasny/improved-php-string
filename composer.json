@@ -1,5 +1,5 @@
 {
-    "name": "jasny/string-functions",
+    "name": "improved/string",
     "description": "",
     "license": "MIT",
     "type": "library",
@@ -11,8 +11,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/jasny/string-functions/issues",
-        "source": "https://github.com/jasny/string-functions"
+        "issues": "https://github.com/improved-php-library/string/issues",
+        "source": "https://github.com/improved-php-library/string"
     },
     "require": {
         "php": ">=7.1.0"
@@ -21,13 +21,10 @@
         "jasny/php-code-quality": "^2.3"
     },
     "autoload": {
-        "psr-4": {
-            "Jasny\\StringFunctions\\": "src/"
-        }
     },
     "autoload-dev": {
         "psr-4": {
-            "Jasny\\StringFunctions\\Tests\\": "tests/"
+            "Improved\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -35,9 +32,6 @@
             "phpunit",
             "phpstan analyse",
             "phpcs -p src"
-        ],
-        "post-create-project-cmd": [
-            "bash init.sh && rm init.sh"
         ]
     },
     "config": {

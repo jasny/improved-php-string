@@ -1,32 +1,36 @@
-Jasny string functions
+![improved PHP library](https://user-images.githubusercontent.com/100821/46372249-e5eb7500-c68a-11e8-801a-2ee57da3e5e3.png)
+
+string
 ===
 
-[![Build Status](https://travis-ci.org/jasny/string-functions.svg?branch=master)](https://travis-ci.org/jasny/string-functions)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jasny/string-functions/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jasny/string-functions/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/jasny/string-functions/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jasny/string-functions/?branch=master)
-[![Packagist Stable Version](https://img.shields.io/packagist/v/jasny/string-functions.svg)](https://packagist.org/packages/jasny/string-functions)
-[![Packagist License](https://img.shields.io/packagist/l/jasny/string-functions.svg)](https://packagist.org/packages/jasny/string-functions)
+[![Build Status](https://travis-ci.org/improved-php-library/string.svg?branch=master)](https://travis-ci.org/improved-php-library/string)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/improved-php-library/string/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/improved-php-library/string/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/improved-php-library/string/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/improved-php-library/string/?branch=master)
+[![Packagist Stable Version](https://img.shields.io/packagist/v/improved/string.svg)](https://packagist.org/packages/improved/string)
+[![Packagist License](https://img.shields.io/packagist/l/improved/string.svg)](https://packagist.org/packages/improved/string)
 
 The PHP string functions are not up to the quality what you ought to expect from a high level programming language.
 
 This library provides a set of useful and consistent string functions for PHP. You should always use these functions
 rather than the ones provided by PHP natively.
 
+All functions are multibyte safe by default, expecting the string to have the UTF-8 character set. Other character sets
+should not be used.
+
 This library does not contain functions that deal with binary data, HTML, characterset, encoding, locale, phonetic,
-string distance and streaming. Those deserve to have their own libraries.
+string distance and streaming.
 
 To perform string operations dealing with a specific locale, use the
 [`Collator` class](http://php.net/manual/en/class.collator.php) from the intl PHP extension instead.
 
-All functions are multibyte (UTF-8) safe by default. To increase performance the `STRING_RAW` flag may be passed, which
-only considers single byte strings. Other character sets should not be used.
-
-_Note: No effort has been made to match the original native PHP function names._
+The [improved/binary](https://github.com/improved-php-library/binary) library provides a set of binary safe string
+manipulation functions. These functions often perform better than their UTF-8 equivilant and may also be used for text
+only ASCII characters.
 
 Installation
 ---
 
-    composer require jasny/string-functions
+    composer require improved/string
 
 Functions
 ---
@@ -60,7 +64,6 @@ Constants
 ### Flags
 
 * `STRING_CASE_INSENSITIVE` - Case insensitive comparison
-* `STRING_RAW` - Perform a (faster) multibyte unsafe operation
 
 ### Find flags
 
@@ -286,9 +289,10 @@ Create a formatted string. See [sprintf()](https://php.net/sprintf) for more inf
 Parse a string, interpreted according to the specified format. See [sscanf()](https://php.net/sscanf) for more
 information.
 
-## Notes to the reader
+## Notes to reader
+
+No effort has been made to match the original native PHP function names.
 
 The code in this library is ugly so your code doesn't have to be. Do not take this as example as how to program.
 
 The intention is to turn this library into a PHP extension.
-

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jasny;
+namespace Improved;
 
 /**
  * Convert the alphabetic characters in a string to lowercase or uppercase.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Jasny;
+namespace Improved;
 
 /**
  * Find the position of a substring.
