@@ -53,7 +53,7 @@ Functions
 * [`string_split(string $subject, string $delimiter[, int $limit])`](#string_split)
 * [`string_convert_case(string $subject, int $flags)`](#string_convert)
 * [`string_remove_accents(string $subject)`](#string_remove_accents)
-* [`string_format(string $format, ...)`](#string_format)
+* [`string_format(string $format, mixed ...$args)`](#string_format)
 * [`string_parse(string $subject, string $format)`](#string_parse)
 * [`string_ord(string $char[, int $flags])`](#string_ord)
 * [`string_chr(int $bytevalue)`](#string_chr)
@@ -137,6 +137,12 @@ Find the position of a substring.
 On `STRING_FIND_FIRST` or `STRING_FIND_LAST`, the position is returned as integer. If string doesn't contain the
 substring, `-1` is returned. `STRING_FIND_ALL` is not supported.
 
+### string_count_values
+
+    int string_count_values(string $subject, string $substr, int $flags = 0)
+
+Count the number of substring occurrences.
+
 ### string_slice
 
     string string_slice(string $subject, int $offset, int $length = null, int $flags = 0)
@@ -211,6 +217,8 @@ Repeat the string multiple times.
 
 Multiplier must be greater than or equal to 0. If the multiplier is set to 0, the function will return an empty string.
 
+Operation is both multibyte and binary safe.
+
 ### string_chunk
 
     array string_chunk(string $subject, int $length, int $flags = 0)
@@ -228,9 +236,19 @@ An empty delimiter splits the string into characters.
 If limit is set and positive, the returned array will contain a maximum of limit elements with the last element
 containing the rest of string. If the limit parameter is negative, all components except the last -limit are returned.
 
+### string_interleave
+
+    string string_interleave(string $left, string $right, int $flags = 0)
+    
+Interleave two strings.
+
+```php
+$result = string_interleave("aeixyz", "áéí"); // "aáeéiíxyz"
+```
+
 ### string_convert_case
 
-    array string_convert_case(string $subject, int $flags)
+    string string_convert_case(string $subject, int $flags)
 
 Convert the alphabetic characters in a string to lowercase or uppercase.
 
@@ -249,19 +267,15 @@ Optionally the conversion may specify a `STRING_SIDE_*` constant. To upper case 
 
 Replace alphabetic characters with accents with similar ASCII characters.
 
+Always does a multibyte safe operation.
+
 ### string_format
 
-    string string_format(string $format, ...)
+    string string_format(string $format, mixed ...$args)
 
-Create a formatted string. See [sprintf()](https://php.net/sprintf) for more information.
+Create a formatted string. See [sprintf()](https://php.net/sprintf) for more information about the formatting.
 
-### string_parse
-
-    string string_parse(string $subject, string $format)
-
-Parse a string, interpreted according to the specified format. See [sscanf()](https://php.net/sscanf) for more
-information.
-
+Always does a multibyte safe operation.
 
 ### string_ord
 

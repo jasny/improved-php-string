@@ -18,8 +18,8 @@ namespace Improved;
  */
 function string_replace(string $subject, $find, $replace, int $flags = STRING_FIND_ALL): string
 {
-    if ($flags & (STRING_FIND_FIRST | STRING_FIND_LAST) === 0) {
-        return str_replace($subject, $find, $replace);
+    if (($flags & (STRING_FIND_FIRST | STRING_FIND_LAST)) === 0) {
+        return \str_replace($subject, $find, $replace);
     }
 
     $position = string_find_position($subject, $find, $flags);
@@ -28,16 +28,7 @@ function string_replace(string $subject, $find, $replace, int $flags = STRING_FI
         return $subject;
     }
 
-    return $flags & STRING_BINARY
-        ? substr_replace($subject, $replace, $position, strlen($find))
-        : _substr_replace_mb($subject, $replace, $position, mb_strlen($find));
-}
-
-/**
- * Multibyte implementation of (simplified) substr_replace.
- * @internal
- */
-function _substr_replace_mb(string $subject, string $replacement, int $position, int $length): string
-{
-    return mb_substr($subject, 0, $position) . $replacement . mb_substr($subject, $position + $length);
+    return ($flags & STRING_BINARY) !== 0
+        ? \substr_replace($subject, $replace, $position, \strlen($find))
+        : \mb_substr($subject, 0, $position) . $replace . \mb_substr($subject, $position + \mb_strlen($find));
 }

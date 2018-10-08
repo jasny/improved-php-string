@@ -21,22 +21,15 @@ namespace Improved;
  */
 function string_split(string $subject, string $delimiter, ?int $limit = null, int $flags = 0): array
 {
-    return $flags & (STRING_MULTIBYTE) === 0
-        ? explode($delimiter, $subject, $limit)
-        : _string_split_mb($subject, $delimiter, $limit);
-}
+    if (($flags & STRING_BINARY) !== 0) {
+        return \explode($delimiter, $subject, $limit);
+    }
 
-/**
- * @internal
- * @todo Escape delimiter
- */
-function _string_chunk_mb(string $subject, string $delimiter, ?int $length): array
-{
-    $parts = mb_split($delimiter, $subject);
+    $parts = \mb_split($delimiter, $subject);
 
-    if (isset($length) && count($parts) > $length) {
-        $last = array_splice($parts, $length - 1);
-        $parts[] = implode($delimiter, $last);
+    if (isset($length) && \count($parts) > $length) {
+        $last = \array_splice($parts, $length - 1);
+        $parts[] = \implode($delimiter, $last);
     }
 
     return $parts;

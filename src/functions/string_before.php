@@ -22,5 +22,7 @@ function string_before(string $subject, string $substr, int $flags = STRING_FIND
         return null;
     }
 
-    return $flags & STRING_BINARY === 0 ? mb_substr($subject, 0, $pos) : substr($subject, 0, $pos);
+    return $flags & STRING_BINARY === 0
+        ? \mb_substr($subject, 0, $pos)
+        : \substr($subject, 0, $pos);
 }

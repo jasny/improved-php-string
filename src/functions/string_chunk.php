@@ -14,20 +14,14 @@ namespace Improved;
  */
 function string_chunk(string $subject, int $length, int $flags = 0): array
 {
-    return $flags & (STRING_BINARY) === 0
-        ? _string_chunk_mb($subject, $length)
-        : str_split($subject, $length);
-}
+    if ($flags & STRING_BINARY !== 0) {
+        return \str_split($subject, $length);
+    }
 
-/**
- * @internal
- */
-function _string_chunk_mb(string $subject, int $length): array
-{
     $result = [];
 
-    for ($i = 0, $n = mb_strlen($subject); $i < $n; $i += $length) {
-        $result[] = mb_substr($subject, $i, $length);
+    for ($i = 0, $n = \mb_strlen($subject); $i < $n; $i += $length) {
+        $result[] = \mb_substr($subject, $i, $length);
     }
 
     return $result;

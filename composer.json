@@ -21,6 +21,10 @@
         "jasny/php-code-quality": "^2.3"
     },
     "autoload": {
+        "files": [
+            "src/constants.php",
+            "src/functions/string_pad.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

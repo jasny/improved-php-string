@@ -11,31 +11,24 @@ namespace Improved;
  *
  * @param string $left
  * @param string $right
- * @param int    $flags   Binary set with a STRING_FIND_* constant + other flags
+ * @param int    $flags
  * @return int
  */
 function string_compare(string $left, string $right, int $flags = 0): int
 {
-    $filterFlags = (STRING_FIND_FIRST | STRING_FIND_LAST | STRING_CASE_INSENSITIVE | STRING_BINARY);
+    $filterFlags = (STRING_CASE_INSENSITIVE | STRING_BINARY);
 
     switch ($flags & $filterFlags) {
         case STRING_CASE_INSENSITIVE:
-            return 0; //TODO
+            $ret = \strcmp(\mb_strtolower($left), \mb_strtolower($right));
+            break;
         case STRING_BINARY | STRING_CASE_INSENSITIVE:
-            return _negative_const(strcasecmp($left, $right));
+            $ret = \strcasecmp($left, $right);
+            break;
         default:
-            return _negative_const(strcmp($left, $left));
+            $ret = \strcmp($left, $left);
+            break;
     }
-}
 
-/**
- * Helper function; Turns negative to -1 and positive to 1.
- * @interal
- *
- * @param int $ret
- * @return int
- */
-function _negative_const(int $ret): int
-{
     return $ret === 0 ? 0 : ($ret < 0 ? -1 : 1);
 }

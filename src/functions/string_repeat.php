@@ -16,5 +16,5 @@ namespace Improved;
  */
 function string_repeat(string $string, int $multiplier): string
 {
-    return str_repeat($string, $multiplier);
+    return \str_repeat($string, $multiplier);
 }

@@ -21,23 +21,23 @@ function string_find_position(string $subject, string $substr, int $flags = STRI
 
     switch ($flags & $filterFlags) {
         case STRING_FIND_FIRST:
-            return _pos_false_to_negative(mb_strpos($subject, $substr));
+            return _pos_false_to_negative(\mb_strpos($subject, $substr));
         case STRING_FIND_LAST:
-            return _pos_false_to_negative(mb_strrpos($subject, $substr));
+            return _pos_false_to_negative(\mb_strrpos($subject, $substr));
         case STRING_CASE_INSENSITIVE | STRING_FIND_FIRST:
-            return _pos_false_to_negative(mb_stripos($subject, $substr));
+            return _pos_false_to_negative(\mb_stripos($subject, $substr));
         case STRING_CASE_INSENSITIVE | STRING_FIND_LAST:
-            return _pos_false_to_negative(mb_strripos($subject, $substr));
+            return _pos_false_to_negative(\mb_strripos($subject, $substr));
         case STRING_BINARY | STRING_FIND_FIRST:
-            return _pos_false_to_negative(strpos($subject, $substr));
+            return _pos_false_to_negative(\strpos($subject, $substr));
         case STRING_BINARY | STRING_FIND_LAST:
-            return _pos_false_to_negative(strrpos($subject, $substr));
+            return _pos_false_to_negative(\strrpos($subject, $substr));
         case STRING_BINARY | STRING_CASE_INSENSITIVE | STRING_FIND_FIRST:
-            return _pos_false_to_negative(stripos($subject, $substr));
+            return _pos_false_to_negative(\stripos($subject, $substr));
         case STRING_BINARY | STRING_CASE_INSENSITIVE | STRING_FIND_LAST:
-            return _pos_false_to_negative(strripos($subject, $substr));
+            return _pos_false_to_negative(\strripos($subject, $substr));
         default:
-            return _pos_false_to_negative(mb_strpos($subject, $substr));
+            return _pos_false_to_negative(\mb_strpos($subject, $substr));
     }
 }
 
