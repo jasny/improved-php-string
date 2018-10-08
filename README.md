@@ -17,15 +17,15 @@ rather than the ones provided by PHP natively.
 All functions are multibyte safe by default, expecting the string to have the UTF-8 character set. Other character sets
 should not be used.
 
-This library does not contain functions that deal with binary data, HTML, characterset, encoding, locale, phonetic,
-string distance and streaming.
+All functions are multibyte (UTF-8) safe by default. The `STRING_BINARY` flag may be passed, for binary safe operations.
+In this case the functions only considers single byte strings.
+
+This library does not contain functions that deal with HTML, character set conversion, locale, phonetic and string
+distance calculations or streaming.
 
 To perform string operations dealing with a specific locale, use the
 [`Collator` class](http://php.net/manual/en/class.collator.php) from the intl PHP extension instead.
 
-The [improved/binary](https://github.com/improved-php-library/binary) library provides a set of binary safe string
-manipulation functions. These functions often perform better than their UTF-8 equivilant and may also be used for text
-only ASCII characters.
 
 Installation
 ---
@@ -40,7 +40,7 @@ Functions
 * [`string_contains(string $subject, string $substr[, int $flags])`](#string_contains)
 * [`string_starts_with(string $subject, string $substr[, int $flags])`](#string_starts_with)
 * [`string_ends_with(string $subject, string $substr[, int $flags])`](#string_ends_with)
-* [`string_length(string $subject)`](#string_length)
+* [`string_length(string $subject, int $flags)`](#string_length)
 * [`string_find_position(string $subject, string $substr[, int $flags])`](#string_find_position)
 * [`string_slice(string $subject, int $offset[, int $length[, int $flags]])`](#string_slice)
 * [`string_before(string $subject, string $substr[, int $flags])`](#string_before)
@@ -55,6 +55,8 @@ Functions
 * [`string_remove_accents(string $subject)`](#string_remove_accents)
 * [`string_format(string $format, ...)`](#string_format)
 * [`string_parse(string $subject, string $format)`](#string_parse)
+* [`string_ord(string $char[, int $flags])`](#string_ord)
+* [`string_chr(int $bytevalue)`](#string_chr)
 
 Constants
 ---
@@ -62,6 +64,7 @@ Constants
 ### Flags
 
 * `STRING_CASE_INSENSITIVE` - Case insensitive comparison
+* `STRING_BINARY` - Binary string (multibyte unaware)
 
 ### Find flags
 
@@ -74,20 +77,6 @@ Constants
 * `STRING_SIDE_LEFT` - Characters on the beginning of the string
 * `STRING_SIDE_RIGHT` - Characters on the end of the string
 * `STRING_SIDE_BOTH` - Characters on both sides of the string
-
-### Types
-
-* `STRING_TYPE_ALNUM` - Alphanumeric characters
-* `STRING_TYPE_ALPHA` - Alphabetic characters
-* `STRING_TYPE_CNTRL` - Control character
-* `STRING_TYPE_DIGIT` - Numeric characters
-* `STRING_TYPE_GRAPH` - Any printable characters except space
-* `STRING_TYPE_LOWER` - Lowercase characters
-* `STRING_TYPE_PRINT` - Printable character
-* `STRING_TYPE_PUNCT` - Any printable character which is not whitespace or an alphanumeric character
-* `STRING_TYPE_SPACE` - Whitespace characters
-* `STRING_TYPE_UPPER` - Uppercase characters
-* `STRING_TYPE_XDIGIT` - Characters representing a hexadecimal digit
 
 ### Case conversions
 
@@ -135,7 +124,9 @@ Check if a string ends with a substring.
 
     int string_length(string $subject, int $flags = 0)
 
-Get the length of a string.
+Get the length of a string in characters.
+
+Use the `STRING_BINARY` flag to get the length in bytes.
 
 ### string_find_position
 
@@ -145,22 +136,6 @@ Find the position of a substring.
 
 On `STRING_FIND_FIRST` or `STRING_FIND_LAST`, the position is returned as integer. If string doesn't contain the
 substring, `-1` is returned. `STRING_FIND_ALL` is not supported.
-
-### string_is_type
-
-    bool string_is_type(string $subject, int $type)
-
-Check whether **all** characters of a string falls into a certain character class.
-
-The type is a binary set. Specify the type with one or more of the `STRING_TYPE_*` constants.
-
-### string_contains_type
-
-    bool string_contains_type(string $subject, int $type)
-
-Check whether **any** characters of a string falls into a certain character class.
-
-The type is a binary set. Specify the type with one or more of the `STRING_TYPE_*` constants.
 
 ### string_slice
 
@@ -286,6 +261,30 @@ Create a formatted string. See [sprintf()](https://php.net/sprintf) for more inf
 
 Parse a string, interpreted according to the specified format. See [sscanf()](https://php.net/sscanf) for more
 information.
+
+
+### string_ord
+
+    int string_ord(string $char, int $flags = 0)
+
+Turns a character into the byte value.
+
+A UTF-8 character can be up to 4 bytes. `string_ord` returns a value between 0 and 4156538815.
+
+With the `STRING_BINARY` flag, the function is multibyte unaware. The value will always be between 0 and 255.
+
+Only the first character is considered. For all characters use [`unpack()`](https://php.net/unpack)
+(binary only).
+
+### string_chr
+
+    string string_chr(int $bytevalue, int $flags = 0)
+
+Turns a byte value into a character.
+
+A UTF-8 character can be up to 4 bytes. `string_chr` can handle values between 0 and 4156538815.
+
+With the `STRING_BINARY` flag, the function is multibyte unaware. The value must be between 0 and 255.
 
 ## Notes to reader
 
