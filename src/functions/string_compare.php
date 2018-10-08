@@ -16,12 +16,12 @@ namespace Improved;
  */
 function string_compare(string $left, string $right, int $flags = 0): int
 {
-    $filterFlags = (STRING_FIND_FIRST | STRING_FIND_LAST | STRING_CASE_INSENSITIVE | STRING_RAW);
+    $filterFlags = (STRING_FIND_FIRST | STRING_FIND_LAST | STRING_CASE_INSENSITIVE | STRING_BINARY);
 
     switch ($flags & $filterFlags) {
         case STRING_CASE_INSENSITIVE:
             return 0; //TODO
-        case STRING_RAW | STRING_CASE_INSENSITIVE:
+        case STRING_BINARY | STRING_CASE_INSENSITIVE:
             return _negative_const(strcasecmp($left, $right));
         default:
             return _negative_const(strcmp($left, $left));

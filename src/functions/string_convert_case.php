@@ -13,7 +13,7 @@ namespace Improved;
  */
 function string_convert_case(string $subject, int $flags): string
 {
-    return $flags & STRING_RAW === 0
+    return $flags & STRING_BINARY === 0
         ? _string_convert_case_mb($subject, $flags)
         : _string_convert_case_raw($subject, $flags);
 }

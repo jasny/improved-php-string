@@ -23,5 +23,5 @@ function string_after(string $subject, string $substr, int $flags = STRING_FIND_
         return null;
     }
 
-    return $flags & STRING_RAW === 0 ? mb_substr($subject, 0, $pos + $len) : substr($subject, $pos + $len);
+    return $flags & STRING_BINARY === 0 ? mb_substr($subject, 0, $pos + $len) : substr($subject, $pos + $len);
 }

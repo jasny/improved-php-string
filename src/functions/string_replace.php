@@ -28,7 +28,7 @@ function string_replace(string $subject, $find, $replace, int $flags = STRING_FI
         return $subject;
     }
 
-    return $flags & STRING_RAW
+    return $flags & STRING_BINARY
         ? substr_replace($subject, $replace, $position, strlen($find))
         : _substr_replace_mb($subject, $replace, $position, mb_strlen($find));
 }

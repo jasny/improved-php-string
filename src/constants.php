@@ -7,7 +7,7 @@ namespace Improved;
 /** Case insensitive comparison */
 const STRING_CASE_INSENSITIVE = 0x010000;
 /** Perform a multibyte unsafe operation */
-const STRING_RAW = 0x020000;
+const STRING_BINARY = 0x020000;
 
 /** Find only the first occurrence of the substring */
 const STRING_FIND_FIRST = 0x0001;

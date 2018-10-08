@@ -14,7 +14,7 @@ namespace Improved;
  */
 function string_chunk(string $subject, int $length, int $flags = 0): array
 {
-    return $flags & (STRING_RAW) === 0
+    return $flags & (STRING_BINARY) === 0
         ? _string_chunk_mb($subject, $length)
         : str_split($subject, $length);
 }

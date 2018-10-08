@@ -13,5 +13,5 @@ namespace Improved;
  */
 function string_length(string $subject, int $flags = 0): int
 {
-    return $flags & STRING_RAW === 0 ? mb_strlen($subject) : strlen($subject);
+    return $flags & STRING_BINARY === 0 ? mb_strlen($subject) : strlen($subject);
 }
