@@ -33,8 +33,8 @@
     },
     "scripts": {
         "test": [
-            "phpunit",
             "phpstan analyse",
+            "phpunit",
             "phpcs -p src"
         ]
     },

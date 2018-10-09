@@ -56,7 +56,7 @@ Functions
 * [`string_format(string $format, mixed ...$args)`](#string_format)
 * [`string_parse(string $subject, string $format)`](#string_parse)
 * [`string_ord(string $char[, int $flags])`](#string_ord)
-* [`string_chr(int $bytevalue)`](#string_chr)
+* [`string_chr(int $bytevalue[, int $flags])`](#string_chr)
 
 Constants
 ---
@@ -76,7 +76,6 @@ Constants
 
 * `STRING_SIDE_LEFT` - Characters on the beginning of the string
 * `STRING_SIDE_RIGHT` - Characters on the end of the string
-* `STRING_SIDE_BOTH` - Characters on both sides of the string
 
 ### Case conversions
 
@@ -84,6 +83,8 @@ Constants
 * `STRING_LOWERCASE` - Lowercase characters
 * `STRING_TITLE` - Uppercase the first character of each word
 
+_These constants are defined the `Improved` namespace. Typically you'd have to do `i\STRING_BINARY` rather than just
+`STRING_BINARY`._
 
 Reference
 ---
@@ -94,6 +95,10 @@ Reference
 
 Compare two strings. Return `true` if the two strings are equal and `false` otherwise.
 
+This function is only useful with the `STRING_CASE_INSENTIVE` flag, otherwise just use `===`.
+
+_No transliteration is done, so where `string_compare` might output 0, `string_equals` can return `false`._
+
 ### string_compare
 
     int string_compare(string $left, string $right, int $flags = 0)
@@ -101,6 +106,14 @@ Compare two strings. Return `true` if the two strings are equal and `false` othe
 Compare two strings. Return -1 if str1 is less than str2; 1 if str1 is greater than str2, and 0 if they are equal.
 
 This function can be used for sorting as set of strings.
+
+When comparing multibyte strings, all accents are removed through transliteration.
+
+```php
+i\string_compare("áéß", "aess"); // 0
+i\string_compare("áéß", "aess", i\STRING_BINARY); // -1
+i\string_equals("áéß", "aess"); // false
+``` 
 
 ### string_contains
 
@@ -195,7 +208,7 @@ In case there is an associative array with find / replace pairs, use `array_keys
 
 ### string_trim
 
-    string string_trim(string $subject, string $characters = " \t\n\r\0\x0B", int $flags = STRING_SIDE_BOTH)
+    string string_trim(string $subject, string $characters = null, int $flags = 0)
 
 Strip characters from the beginning and/or end of a string.
 
@@ -203,11 +216,11 @@ By default whitespace characters are trimmed from both ends.
 
 ### string_pad
 
-    string string_pad(string $subject, int $length, string $characters = " ", int $flags = STRING_SIDE_RIGHT)
+    string string_pad(string $subject, int $length, string $characters = " ", int $flags = 0)
 
 Pad a string to a certain length.
 
-_Note: If `STRING_SIDE_BOTH` is specified and an uneven number of characters, more padding is added to the right._
+_Note: When padding on both sides and an uneven number of characters, more padding is added to the right._
 
 ### string_repeat
 
@@ -243,7 +256,7 @@ containing the rest of string. If the limit parameter is negative, all component
 Interleave two strings.
 
 ```php
-$result = string_interleave("aeixyz", "áéí"); // "aáeéiíxyz"
+$result = i\string_interleave("aeixyz", "áéí"); // "aáeéiíxyz"
 ```
 
 ### string_convert_case
@@ -255,17 +268,21 @@ Convert the alphabetic characters in a string to lowercase or uppercase.
 If `STRING_TITLE` is specified, the first character of each words is converted to upper case. This may be mixed
 with `STRING_LOWERCASE` to convert the other characters to lower case. By default other characters are untouched.
 
-    $result = string_convert_case($subject, STRING_TITLE | STRING_LOWERCASE);
+```php
+$result = i\string_convert_case("HeLLo WORLD", i\STRING_TITLE | i\STRING_LOWERCASE); // "Hello World"
+```
 
 Optionally the conversion may specify a `STRING_SIDE_*` constant. To upper case the first character of a string do
 
-    $result = string_convert_case($subject, STRING_UPPERCASE | STRING_SIDE_LEFT);
+```php
+$result = i\string_convert_case("hello world", i\STRING_UPPERCASE | i\STRING_SIDE_LEFT); // "Hello world"
+```
 
-### string_remove_accents
+### string_transliterate
 
     string string_remove_accents(string $subject)
 
-Replace alphabetic characters with accents with similar ASCII characters.
+Replace western alphabetic characters with accents with similar ASCII characters.
 
 Always does a multibyte safe operation.
 

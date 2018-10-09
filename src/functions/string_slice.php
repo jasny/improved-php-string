@@ -20,7 +20,7 @@ namespace Improved;
  * @param int    $flags
  * @return string
  */
-function string_slice(string $subject, int $offset, int $length = null, int $flags = 0): string
+function string_slice(string $subject, int $offset, ?int $length = null, int $flags = 0): string
 {
     return ($flags & STRING_BINARY) !== 0
         ? \substr($subject, $offset, $length)

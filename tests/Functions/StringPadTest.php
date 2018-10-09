@@ -26,7 +26,7 @@ class StringPadTest extends TestCase
 
     public function testBoth()
     {
-        $padded = i\string_pad("hi", 9, "ée", i\STRING_SIDE_BOTH);
+        $padded = i\string_pad("hi", 9, "ée");
 
         $this->assertEquals("éeéhiéeée", $padded);
     }

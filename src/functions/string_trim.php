@@ -12,23 +12,24 @@ namespace Improved;
  * @param int    $flags
  * @return string
  */
-function string_trim(string $subject, string $characters = " \t\n\r\0\x0B", int $flags = STRING_SIDE_BOTH): string
+function string_trim(string $subject, ?string $characters = null, int $flags = 0): string
 {
     $side = $flags & (STRING_SIDE_LEFT | STRING_SIDE_RIGHT);
+    $trim = $characters ?? " \t\n\r\0\x0B";
 
     if (($flags & STRING_BINARY) !== 0) {
         switch ($side) {
             case STRING_SIDE_LEFT:
-                return \ltrim($subject, $characters);
+                return \ltrim($subject, $trim);
             case STRING_SIDE_RIGHT:
-                return \rtrim($subject, $characters);
+                return \rtrim($subject, $trim);
             default:
-                return \trim($subject, $characters);
+                return \trim($subject, $trim);
         }
     }
 
     $replace = ($side === STRING_SIDE_LEFT ? '^' : '')
-        . '[' . \preg_quote($characters, '#') . ']*'
+        . '[' . \preg_quote($trim, '#') . ']*'
         . ($side === STRING_RIGHT_LEFT ? '$' : '');
 
     return \preg_replace('/' . $replace . '/u', '', $subject);

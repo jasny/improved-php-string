@@ -17,27 +17,38 @@ namespace Improved;
  */
 function string_find_position(string $subject, string $substr, int $flags = STRING_FIND_FIRST): int
 {
+    if (($flags & (STRING_CASE_INSENSITIVE | STRING_BINARY)) === STRING_CASE_INSENSITIVE) {
+        $subject = \strtr($subject, ['ẞ' => 'ß']);
+        $substr = \strtr($substr, ['ẞ' => 'ß']);
+    }
+
     $filterFlags = (STRING_FIND_FIRST | STRING_FIND_LAST | STRING_CASE_INSENSITIVE | STRING_BINARY);
 
     switch ($flags & $filterFlags) {
+        case 0:
         case STRING_FIND_FIRST:
             return _pos_false_to_negative(\mb_strpos($subject, $substr));
         case STRING_FIND_LAST:
             return _pos_false_to_negative(\mb_strrpos($subject, $substr));
+        case STRING_CASE_INSENSITIVE:
         case STRING_CASE_INSENSITIVE | STRING_FIND_FIRST:
             return _pos_false_to_negative(\mb_stripos($subject, $substr));
         case STRING_CASE_INSENSITIVE | STRING_FIND_LAST:
             return _pos_false_to_negative(\mb_strripos($subject, $substr));
+
+        case STRING_BINARY:
         case STRING_BINARY | STRING_FIND_FIRST:
             return _pos_false_to_negative(\strpos($subject, $substr));
         case STRING_BINARY | STRING_FIND_LAST:
             return _pos_false_to_negative(\strrpos($subject, $substr));
+        case STRING_BINARY | STRING_CASE_INSENSITIVE:
         case STRING_BINARY | STRING_CASE_INSENSITIVE | STRING_FIND_FIRST:
             return _pos_false_to_negative(\stripos($subject, $substr));
         case STRING_BINARY | STRING_CASE_INSENSITIVE | STRING_FIND_LAST:
             return _pos_false_to_negative(\strripos($subject, $substr));
+
         default:
-            return _pos_false_to_negative(\mb_strpos($subject, $substr));
+            return _pos_false_to_negative(\mb_strpos($subject, $substr)); // @codeCoverageIgnore
     }
 }
 

@@ -66,15 +66,25 @@ function _string_convert_case_mb(string $subject, int $flags): string
             $firstChar = \mb_substr($subject, 0, 1);
             $rest = \mb_substr($subject, 1, $length - 1);
 
-            return \mb_convert_case($firstChar, $mode) . $rest;
+            return _mb_convert_case_all($firstChar, $mode) . $rest;
 
         case STRING_SIDE_RIGHT:
             $lastChar = \mb_substr($subject, -1, 1);
             $rest = \mb_substr($subject, 0, -1);
 
-            return $rest . \mb_convert_case($lastChar, $mode);
+            return $rest . _mb_convert_case_all($lastChar, $mode);
 
         default:
-            return \mb_convert_case($subject, $mode);
+            return _mb_convert_case_all($subject, $mode);
     }
+}
+
+/**
+ * @internal
+ */
+function _mb_convert_case_all(string $subject, int $mode): string
+{
+    $converted = \mb_convert_case($subject, $mode, 'UTF-8');
+
+    return \strtr($converted, ['ß' => 'ẞ']);
 }

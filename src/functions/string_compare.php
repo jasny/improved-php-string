@@ -16,19 +16,14 @@ namespace Improved;
  */
 function string_compare(string $left, string $right, int $flags = 0): int
 {
-    $filterFlags = (STRING_CASE_INSENSITIVE | STRING_BINARY);
-
-    switch ($flags & $filterFlags) {
-        case STRING_CASE_INSENSITIVE:
-            $ret = \strcmp(\mb_strtolower($left), \mb_strtolower($right));
-            break;
-        case STRING_BINARY | STRING_CASE_INSENSITIVE:
-            $ret = \strcasecmp($left, $right);
-            break;
-        default:
-            $ret = \strcmp($left, $left);
-            break;
+    if (($flags & STRING_BINARY) === 0) {
+        $left = string_transliterate($left);
+        $right = string_transliterate($right);
     }
+
+    $ret = (($flags & STRING_CASE_INSENSITIVE) === 0)
+        ? \strcmp($left, $right)
+        : \strcasecmp($left, $right);
 
     return $ret === 0 ? 0 : ($ret < 0 ? -1 : 1);
 }

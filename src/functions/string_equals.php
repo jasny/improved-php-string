@@ -14,14 +14,16 @@ namespace Improved;
  */
 function string_equals(string $left, string $right, int $flags = 0): bool
 {
-    $filterFlags = (STRING_CASE_INSENSITIVE | STRING_BINARY);
-
-    switch ($flags & $filterFlags) {
-        case STRING_CASE_INSENSITIVE:
-            return \mb_strtoupper($left, 'UTF-8') === \mb_strtoupper($right, 'UTF-8');
-        case STRING_BINARY | STRING_CASE_INSENSITIVE:
-            return \strcasecmp($left, $right) === 0;
-        default:
-            return $left === $right;
+    if (($flags & STRING_CASE_INSENSITIVE) === 0) {
+        return $left === $right;
     }
+
+    if (($flags & STRING_BINARY) !== 0) {
+        return \strcasecmp($left, $right) === 0;
+    }
+
+    $leftUpper = \mb_strtoupper(\strtr($left, ['ß' => 'ẞ']), 'UTF-8');
+    $rightUpper = \mb_strtoupper(\strtr($right, ['ß' => 'ẞ']), 'UTF-8');
+
+    return $leftUpper === $rightUpper;
 }

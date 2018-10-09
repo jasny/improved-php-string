@@ -13,17 +13,15 @@ namespace Improved;
  * @param int    $flags
  * @return string
  */
-function string_pad(string $subject, int $length, string $characters = " ", int $flags = STRING_SIDE_RIGHT): string
+function string_pad(string $subject, int $length, string $characters = " ", int $flags = 0): string
 {
-    $mode = ($flags & (STRING_SIDE_LEFT | STRING_SIDE_RIGHT | STRING_SIDE_BOTH)) >> 5;
-
     if (($flags & STRING_BINARY) === 0) {
         $bytes = \strlen($characters);
         $chars = \mb_strlen($characters, 'UTF-8');
 
         if ($bytes === $chars) {
             $length = \strlen($subject) - \mb_strlen($subject, 'UTF-8') + $length;
-        } elseif (($flags & STRING_SIDE_BOTH) === 0) {
+        } elseif (($flags & (STRING_SIDE_LEFT | STRING_SIDE_RIGHT)) !== 0) {
             $addChars = $length - \mb_strlen($subject, 'UTF-8');
             $add = (\floor($addChars / $chars) * $bytes)
                 + \strlen(\mb_substr($characters, 0, $addChars % $chars));
@@ -38,5 +36,8 @@ function string_pad(string $subject, int $length, string $characters = " ", int 
         }
     }
 
-    return \str_pad($subject, $length, $characters, $mode);
+    // Convert to STR_PAD_* constant
+    $padType = ((($flags & (STRING_SIDE_LEFT | STRING_SIDE_RIGHT)) >> 4) + 2) % 3;
+
+    return \str_pad($subject, $length, $characters, $padType);
 }
