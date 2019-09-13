@@ -11,5 +11,4 @@ string
 
 This library is no good for many reasons. Don't bother looking into it. Look at this puppy instead;
 
-![distraction](https://media.giphy.com/media/QFSD9tGuryBHy/giphy.gif)
-
+![distraction](https://user-images.githubusercontent.com/100821/64896505-5dd66380-d680-11e9-842b-383e4f758c0b.gif)
